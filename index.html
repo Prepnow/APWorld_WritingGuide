@@ -304,14 +304,70 @@ details[open] summary::after{content:'−';}
 .score-pill span{color:#F5C842;font-weight:500;}
 .empty{text-align:center;padding:60px 24px;color:var(--ink-muted);font-size:14px;}
 
+
+/* ── AI FEEDBACK UI ── */
+.ai-loading{display:flex;flex-direction:column;align-items:center;padding:36px;gap:14px;}
+.ai-spinner{width:38px;height:38px;border:3px solid var(--paper-tan);border-top-color:var(--navy);border-radius:50%;animation:aispin .85s linear infinite;}
+@keyframes aispin{to{transform:rotate(360deg)}}
+.ai-loading-text{font-size:13px;color:var(--ink-muted);letter-spacing:.03em;}
+.ai-score-header{display:flex;align-items:center;gap:16px;background:var(--pw);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:14px;flex-wrap:wrap;}
+.ai-score-num{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;line-height:1;}
+.ai-score-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-m);margin-top:3px;}
+.ai-dots{display:flex;align-items:center;gap:4px;flex:1;flex-wrap:wrap;}
+.ai-dot{width:11px;height:11px;border-radius:50%;}
+.ai-dot.earned{background:var(--forest);}
+.ai-dot.missed{background:var(--pt);}
+.ai-callouts{max-width:240px;font-size:12px;line-height:1.55;}
+.ai-strength{color:var(--forest);margin-bottom:4px;}
+.ai-fix{color:var(--rust);}
+.ai-panels{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:680px){.ai-panels{grid-template-columns:1fr;}}
+.ai-panel{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:14px 16px;overflow:hidden;}
+.ai-panel-title{font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-m);margin-bottom:12px;}
+.ai-crit-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);align-items:flex-start;}
+.ai-crit-row:last-child{border-bottom:none;}
+.ai-crit-icon{flex-shrink:0;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px;}
+.ai-crit-icon.hit{background:var(--forest);color:#fff;}
+.ai-crit-icon.miss{background:var(--rust);color:#fff;}
+.ai-crit-name{font-size:13px;font-weight:500;color:var(--ink);}
+.ai-crit-pts{font-size:11px;font-weight:500;margin-left:6px;}
+.ai-crit-pts.hit{color:var(--forest);}
+.ai-crit-pts.miss{color:var(--rust);}
+.ai-crit-reason{font-size:13px;color:var(--ink-s);line-height:1.58;margin-top:3px;}
+.ai-crit-fix{margin-top:6px;background:var(--amber-l);border-left:3px solid #F5C842;padding:6px 10px;border-radius:0 5px 5px 0;font-size:12.5px;color:var(--amber);line-height:1.55;}
+.ai-sample{font-size:13px;color:var(--ink-s);line-height:1.78;}
+.ai-anno-key{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.ai-anno-tag{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;}
 </style>
 </head>
 <body>
+<!-- NAV -->
+<nav id="mainnav">
+  <button class="active" onclick="goSection('overview',this)">Overview</button>
+  <button onclick="goSection('saq',this)">SAQ Guide</button>
+  <div class="nav-gap"></div>
+  <button onclick="goSection('dbq',this)">DBQ Guide</button>
+  <button onclick="goSection('leq',this)">LEQ Guide</button>
+  <div class="nav-gap"></div>
+  <button onclick="goSection('timing',this)">Timing</button>
+  <button onclick="goSection('plan',this)">Study Plan</button>
+  <button onclick="goSection('quickref',this)">Quick Ref</button>
+  <div class="nav-gap"></div>
+  <button onclick="goSection('prac-saq',this)" style="color:#F5C842">SAQ Practice</button>
+  <button onclick="goSection('prac-leq',this)" style="color:#F5C842">LEQ Practice</button>
+  <button onclick="goSection('prac-dbq',this)" style="color:#F5C842">DBQ Practice</button>
+  <button onclick="goSection('simulator',this)" style="color:#F5C842">✍ Simulator</button>
+  <div class="score-pill" id="score-pill" style="display:none">Attempted: <span id="score-num">0</span></div>
+</nav>
+
 
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-eyebrow">AP World History · Complete Writing Guide</div>
+
+
+
   <h1>SAQ & LAQ — Stop <span class="hl">Overthinking</span>,<br>Start Scoring</h1>
   <p>Complete strategy guide + exam-style practice questions with timed writing, rubric checking, and annotated sample answers.</p>
   <div class="hero-stats">
@@ -893,26 +949,6 @@ details[open] summary::after{content:'−';}
 <!-- ═══════════ JAVASCRIPT ═══════════ -->
 
 
-<!-- NAV -->
-<nav id="mainnav">
-  <button class="active" onclick="goSection('overview',this)">Overview</button>
-  <button onclick="goSection('saq',this)">SAQ Guide</button>
-  <div class="nav-gap"></div>
-  <button onclick="goSection('dbq',this)">DBQ Guide</button>
-  <button onclick="goSection('leq',this)">LEQ Guide</button>
-  <div class="nav-gap"></div>
-  <button onclick="goSection('timing',this)">Timing</button>
-  <button onclick="goSection('plan',this)">Study Plan</button>
-  <button onclick="goSection('quickref',this)">Quick Ref</button>
-  <div class="nav-gap"></div>
-  <button onclick="goSection('prac-saq',this)" style="color:#F5C842">SAQ Practice</button>
-  <button onclick="goSection('prac-leq',this)" style="color:#F5C842">LEQ Practice</button>
-  <button onclick="goSection('prac-dbq',this)" style="color:#F5C842">DBQ Practice</button>
-  <button onclick="goSection('simulator',this)" style="color:#F5C842">✍ Simulator</button>
-  <div class="score-pill" id="score-pill" style="display:none">Attempted: <span id="score-num">0</span></div>
-</nav>
-
-
 <!-- ═══════════════════════════════
      HOW TO USE
 ═══════════════════════════════ -->
@@ -1017,6 +1053,7 @@ details[open] summary::after{content:'−';}
 
 
 <script>
+
 
 
 // ── NAVIGATION ──
@@ -1782,7 +1819,7 @@ function renderSAQ(){
         <div class="write-btns">
           <button class="wbtn primary" onclick="startTimer('${q.id}',13)">▶ Start Timer</button>
           <button class="wbtn" onclick="stopTimer('${q.id}')">⏸ Pause</button>
-          <button class="wbtn primary" onclick="checkSAQ('${q.id}')">✓ Check Rubric</button>
+          <button class="wbtn primary" onclick="checkSAQ('${q.id}')">✦ AI Grade</button>
           <button class="wbtn danger" onclick="clearWrite('${q.id}')">✗ Clear</button>
         </div>
         <div class="rubric-feedback" id="rf-${q.id}"></div>
@@ -1854,7 +1891,7 @@ function renderLEQ(){
         <div class="write-btns">
           <button class="wbtn primary" onclick="startTimer('${q.id}',40)">▶ Start Timer</button>
           <button class="wbtn" onclick="stopTimer('${q.id}')">⏸ Pause</button>
-          <button class="wbtn primary" onclick="checkLEQ('${q.id}')">✓ Check Rubric</button>
+          <button class="wbtn primary" onclick="checkLEQ('${q.id}')">✦ AI Grade</button>
           <button class="wbtn danger" onclick="clearWrite('${q.id}')">✗ Clear</button>
         </div>
         <div class="rubric-feedback" id="rf-${q.id}"></div>
@@ -1920,7 +1957,7 @@ function renderDBQ(){
         <div class="write-btns">
           <button class="wbtn primary" onclick="startTimer('${q.id}',60)">▶ Start Timer</button>
           <button class="wbtn" onclick="stopTimer('${q.id}')">⏸ Pause</button>
-          <button class="wbtn primary" onclick="checkDBQ('${q.id}')">✓ Check Rubric</button>
+          <button class="wbtn primary" onclick="checkDBQ('${q.id}')">✦ AI Grade</button>
           <button class="wbtn danger" onclick="clearWrite('${q.id}')">✗ Clear</button>
         </div>
         <div class="rubric-feedback" id="rf-${q.id}"></div>
@@ -1992,70 +2029,13 @@ function skillLabel(s){return{causation:'Causation',ccot:'CCOT',comparison:'Comp
 // ═══════════════════════════════════════════
 // RUBRIC CHECKERS
 // ═══════════════════════════════════════════
-function checkSAQ(id){
-  const text=document.getElementById('wt-'+id).value.trim();
-  const words=text.split(/\s+/).filter(Boolean).length;
-  if(words<15){alert('Write your response first, then check the rubric.');return;}
-  const checks=[
-    {label:'Part A — Direct Claim',hint:'Part A should start with a direct answer to the "describe" or "explain" question — a clear claim statement.',hit:words>25},
-    {label:'Part B — Specific Evidence',hint:'Part B needs a named specific example — an event, person, treaty, or development. Vague references don\'t earn the point.',hit:/[A-Z][a-zA-Z]+(dynasty|empire|treaty|war|act|system|revolution|trade|silk|mongol|ottoman|british|spanish|french|colonial|industrial|atlantic|ming|qing|aztec|inca|mali|song|yuan|tang|mughal|dutch|portuguese)/i.test(text)&&words>40},
-    {label:'Part C — Explanation (HOW/WHY)',hint:'The most common missing point. Part C requires explaining HOW or WHY — look for "because," "therefore," "this led to," "this shows," or "as a result."',hit:/(because|therefore|this led|which caused|as a result|this shows|thus|consequently|which resulted)/i.test(text)},
-  ];
-  renderFeedback(id,checks,'saq');
-}
+function checkSAQ(id){ aiGrade(id,'saq'); }
 
-function checkLEQ(id){
-  const text=document.getElementById('wt-'+id).value.trim();
-  const words=text.split(/\s+/).filter(Boolean).length;
-  if(words<40){alert('Write your essay first, then check the rubric.');return;}
-  const checks=[
-    {label:'Thesis (1 pt)',hint:'Does your thesis make a specific, historically defensible claim AND provide a line of reasoning (because/by/through)? It should NOT just restate the prompt.',hit:words>60&&!/(throughout history|this essay will|many factors played|various factors|in conclusion, as stated)/i.test(text)},
-    {label:'Contextualization (1 pt)',hint:'3+ sentences of historical context that is broader than the prompt, with an explicit connection. A single sentence does not earn this point.',hit:words>100},
-    {label:'Specific Evidence — 1 (1 pt)',hint:'At least one specific historical example named (event, person, policy).',hit:words>80&&/[A-Z][a-z]+(empire|dynasty|war|revolution|treaty|act|system|trade|movement|congress|republic|manifest|charter|conference|massacre|reform|campaign|rebellion)/i.test(text)},
-    {label:'Specific Evidence — 2 (1 pt)',hint:'A second specific historical example from a different region or time period than your first.',hit:words>160},
-    {label:'Skill Analysis (1 pt)',hint:'Does your essay demonstrate the required skill? Causation: "caused/led to/resulted in." CCOT: "changed/continued/persisted." Comparison: "unlike/whereas/similarly/both."',hit:/(caused|led to|resulted in|changed over|persisted|continued despite|whereas|unlike|both.*and|compared to|in contrast to|similarly)/i.test(text)&&words>120},
-    {label:'Complexity (1 pt)',hint:'At least one sentence showing complexity: a qualification ("although/while/however"), connection to a different period, or acknowledgment of counterevidence.',hit:/(however|although|while|despite|conversely|on the other hand|paradox|exception|complicates|not all|in contrast)/i.test(text)&&words>180},
-  ];
-  renderFeedback(id,checks,'leq');
-}
+function checkLEQ(id){ aiGrade(id,'leq'); }
 
-function checkDBQ(id){
-  const text=document.getElementById('wt-'+id).value.trim();
-  const words=text.split(/\s+/).filter(Boolean).length;
-  if(words<60){alert('Write your essay first, then check the rubric.');return;}
-  const docCount=(text.match(/document\s*[1-7]/gi)||[]).length;
-  const checks=[
-    {label:'Thesis (1 pt)',hint:'Defensible claim with a line of reasoning — evaluating the EXTENT of something, not just stating it happened.',hit:words>80&&!/(throughout history|this essay will|many factors)/i.test(text)},
-    {label:'Contextualization (1 pt)',hint:'A developed paragraph (3+ sentences) of broader historical context connected to the prompt. Must appear before the thesis.',hit:words>120},
-    {label:'Content from 3+ Docs (1 pt)',hint:'Accurately describe content from at least 3 documents — your essay must reference their actual content, not just their numbers.',hit:docCount>=3},
-    {label:'HAPP Sourcing 3+ Docs (2 pts)',hint:'Explain HOW the author\'s purpose, audience, historical context, or point of view is relevant to your argument for at least 3 documents.',hit:/(because.*written|as.*author|given.*position|perspective.*of|purpose of|intended.*audience|point of view|historical context of)/i.test(text)&&docCount>=3},
-    {label:'Outside Evidence (1 pt)',hint:'At least one specific piece of historical evidence NOT in the documents. Name a specific event, person, treaty, or development.',hit:words>200&&/(outside|beyond the documents|not mentioned|additionally|furthermore.*[A-Z])/i.test(text)||words>280},
-    {label:'Complexity (1 pt)',hint:'Corroboration, qualification, or connection to a different period — one well-placed sentence is enough.',hit:/(however|although|while|despite|on the other hand|in contrast|paradox|complicates|qualif)/i.test(text)&&words>220},
-  ];
-  renderFeedback(id,checks,'dbq');
-}
+function checkDBQ(id){ aiGrade(id,'dbq'); }
 
-function renderFeedback(id,checks,type){
-  const total=checks.length;
-  const earned=checks.filter(c=>c.hit).length;
-  const gridHtml=checks.map(c=>`
-    <div class="rf-cell ${c.hit?'hit':'miss'}">
-      <div class="rfc-icon">${c.hit?'✓':'✗'}</div>
-      <div class="rfc-label">${c.label}</div>
-      <div class="rfc-status">${c.hit?'Likely earned':'Check this'}</div>
-    </div>`).join('');
-  const missed=checks.filter(c=>!c.hit);
-  const tipsHtml=missed.length
-    ?`<strong>Points to review:</strong><ul>${missed.map(c=>`<li><strong>${c.label}:</strong> ${c.hint}</li>`).join('')}</ul>`
-    :`<strong>All rubric signals detected!</strong> Review your response manually to confirm historical accuracy and specificity. Consider whether your complexity move is truly analytical.`;
-  const rf=document.getElementById('rf-'+id);
-  rf.innerHTML=`
-    <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:10px">Rubric Check: ~${earned}/${total} signals detected</div>
-    <div class="rf-grid">${gridHtml}</div>
-    <div class="rf-tips">${tipsHtml}</div>`;
-  rf.classList.add('show');
-  rf.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
+function renderFeedback(id,checks,type){ /* replaced by renderAIFeedback */ }
 
 // ═══════════════════════════════════════════
 // INIT
@@ -2065,6 +2045,131 @@ renderLEQ();
 renderDBQ();
 
 
+
+
+
+// ══════════════════════════════════════
+// AI GRADING ENGINE
+// ══════════════════════════════════════
+
+async function aiGrade(id, type) {
+  const textarea = document.getElementById('wt-'+id);
+  if(!textarea){ console.error('No textarea for',id); return; }
+  const text = textarea.value.trim();
+  const words = text.split(/\s+/).filter(Boolean).length;
+  if(words < 15){ alert('Write your response first, then click Check.'); return; }
+
+  const rf = document.getElementById('rf-'+id);
+  rf.innerHTML = `<div class="ai-loading"><div class="ai-spinner"></div><div class="ai-loading-text">AI grading your response…</div></div>`;
+  rf.classList.add('show');
+
+  let prompt = '', sampleHtml = '', maxPts = 3;
+
+  if(type === 'saq'){
+    maxPts = 3;
+    const q = SAQ_DATA.find(x=>x.id===id);
+    if(!q){ rf.innerHTML='<div class="rf-tips"><strong>Error:</strong> Question data not found.</div>'; return; }
+    const stim = q.stimulus ? `STIMULUS: "${q.stimulus.text}"\nATTRIBUTION: ${q.stimulus.attr}\n\n` : '';
+    prompt = `You are a strict AP World History SAQ grader. Score this response using the official rubric.\n\n${stim}PART A (1 pt): ${q.parts[0].q}\nPART B (1 pt): ${q.parts[1].q}\nPART C (1 pt): ${q.parts[2].q}\n\nSTUDENT RESPONSE:\n${text}\n\nRUBRIC — each part earns 1 point ONLY if ALL three conditions are met:\n- A direct, specific claim directly answering the part\n- A named, specific historical example as evidence (not vague)\n- An explicit explanation of HOW or WHY using connective language (because / therefore / this led to / this shows / thus / as a result)\n\nReturn ONLY valid JSON (no markdown, no explanation):\n{"total":0,"parts":[{"part":"a","earned":true,"reason":"1-2 sentence explanation of score","fix":null},{"part":"b","earned":true,"reason":"...","fix":null},{"part":"c","earned":false,"reason":"...","fix":"specific 1-sentence instruction to fix"}],"strength":"1 sentence on the best thing the student did","priority_fix":"most important 1-sentence fix, or 'Strong response — all parts earned the point' if total is 3"}`;
+    sampleHtml = `<div style="margin-bottom:10px"><strong style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);display:block;margin-bottom:4px">Part A:</strong>${q.sample.a}</div><div style="margin-bottom:10px"><strong style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);display:block;margin-bottom:4px">Part B:</strong>${q.sample.b}</div><div><strong style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);display:block;margin-bottom:4px">Part C:</strong>${q.sample.c}</div>`;
+
+  } else if(type === 'leq'){
+    maxPts = 6;
+    const q = LEQ_DATA.find(x=>x.id===id);
+    if(!q){ rf.innerHTML='<div class="rf-tips"><strong>Error:</strong> Question data not found.</div>'; return; }
+    const choices = q.choices.map((c,i)=>`${i+1}. ${c.text}`).join('\n');
+    const skill = q.skill||'';
+    prompt = `You are a strict AP World History LEQ grader. Score this essay using the official 6-point rubric.\n\nPROMPT OPTIONS (student chose one):\n${choices}\nSKILL TESTED: ${skill}\n\nSTUDENT ESSAY:\n${text}\n\nRUBRIC:\n1. Thesis (1pt): A historically defensible claim with a line of reasoning. Must NOT just restate the prompt. Must be in intro or conclusion.\n2. Contextualization (1pt): A developed paragraph of 3+ sentences of broader historical context explicitly connected to the argument. A single sentence does NOT earn this.\n3. Evidence 1 (1pt): At least one specific named historical example (event, person, policy, development).\n4. Evidence 2 (1pt): A second specific named example demonstrating breadth of knowledge.\n5. Skill Analysis (1pt): For causation — explains cause-effect mechanism. For CCOT — identifies what changed AND what stayed the same with explanation. For comparison — identifies similarity AND difference with explanation.\n6. Complexity (1pt): Demonstrates complex understanding via qualification, corroboration, connection to a different time period/scale, or meaningful counterargument. One well-placed sentence is enough.\n\nReturn ONLY valid JSON (no markdown, no explanation):\n{"total":0,"criteria":[{"name":"Thesis","max":1,"earned":0,"reason":"...","fix":null},{"name":"Contextualization","max":1,"earned":0,"reason":"...","fix":"..."},{"name":"Evidence 1","max":1,"earned":0,"reason":"...","fix":null},{"name":"Evidence 2","max":1,"earned":0,"reason":"...","fix":null},{"name":"Skill Analysis","max":1,"earned":0,"reason":"...","fix":null},{"name":"Complexity","max":1,"earned":0,"reason":"...","fix":"..."}],"strength":"1 sentence on what the student did best","priority_fix":"most important 1-sentence fix, or 'Strong essay' if 5-6/6"}`;
+    const thHtml = q.sample_thesis.map((t,i)=>`<div style="margin-bottom:8px;padding:8px 10px;background:var(--pw);border:1px solid var(--bd);border-radius:6px;font-size:12.5px;color:var(--ink-s);line-height:1.65"><strong style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);display:block;margin-bottom:3px">Sample Thesis ${i+1}:</strong>${t}</div>`).join('');
+    sampleHtml = thHtml + `<div style="margin-top:10px;font-size:12px;color:var(--ink-m);font-style:italic">Sample theses shown above. Full essay sample not included — compare your body paragraphs against each rubric criterion in the breakdown.</div>`;
+
+  } else if(type === 'dbq'){
+    maxPts = 7;
+    const q = DBQ_DATA.find(x=>x.id===id);
+    if(!q){ rf.innerHTML='<div class="rf-tips"><strong>Error:</strong> Question data not found.</div>'; return; }
+    const docsText = q.docs.map(d=>`${d.num}: "${d.text.substring(0,200)}..." — ${d.attr}`).join('\n\n');
+    prompt = `You are a strict AP World History DBQ grader. Score this essay using the official 7-point rubric.\n\nPROMPT: ${q.prompt}\n\nDOCUMENTS (summarized):\n${docsText}\n\nSTUDENT ESSAY:\n${text}\n\nRUBRIC:\n1. Thesis (1pt): Historically defensible claim with line of reasoning in intro or conclusion.\n2. Contextualization (1pt): Developed paragraph of 3+ sentences of broader historical context connected to argument.\n3. Doc Content (1pt): Accurately uses content from at least 3 documents.\n4. HAPP Sourcing — 1 doc (1pt): Explains how author's Historical context/Audience/Purpose/Point of View is relevant to the argument for at least 1 document.\n5. HAPP Sourcing — 3 docs (1pt): Extends sourcing to at least 3 documents total.\n6. Outside Evidence (1pt): Uses at least one specific piece of evidence NOT from the documents.\n7. Complexity (1pt): Corroboration, qualification, connection to different time period or scale, or meaningful counterargument.\n\nReturn ONLY valid JSON (no markdown, no explanation):\n{"total":0,"criteria":[{"name":"Thesis","max":1,"earned":0,"reason":"...","fix":null},{"name":"Contextualization","max":1,"earned":0,"reason":"...","fix":"..."},{"name":"Doc Content (3+ docs)","max":1,"earned":0,"reason":"...","fix":null},{"name":"HAPP Sourcing — 1 doc","max":1,"earned":0,"reason":"...","fix":"..."},{"name":"HAPP Sourcing — 3 docs","max":1,"earned":0,"reason":"...","fix":"..."},{"name":"Outside Evidence","max":1,"earned":0,"reason":"...","fix":"..."},{"name":"Complexity","max":1,"earned":0,"reason":"...","fix":"..."}],"strength":"1 sentence","priority_fix":"most important fix"}`;
+    sampleHtml = `<div style="font-size:13px;color:var(--ink-s);line-height:1.72"><strong style="color:var(--navy)">Thesis tip:</strong> ${q.rubric.thesis}<br><br><strong style="color:var(--navy)">Contextualization tip:</strong> ${q.rubric.context}<br><br><strong style="color:var(--navy)">Sourcing tip:</strong> ${q.rubric.sourcing}<br><br><strong style="color:var(--navy)">Outside evidence:</strong> ${q.rubric.outside}<br><br><strong style="color:var(--navy)">Complexity:</strong> ${q.rubric.complexity}</div>`;
+  }
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role:'user', content: prompt}]
+      })
+    });
+    const data = await response.json();
+    const raw = data.content.map(b=>b.type==='text'?b.text:'').join('');
+    const clean = raw.replace(/```json\s*|```\s*/g,'').trim();
+    const result = JSON.parse(clean);
+    renderAIFeedback(id, result, type, maxPts, sampleHtml);
+  } catch(err) {
+    rf.innerHTML = `<div class="rf-tips" style="background:var(--rust-pale);border-color:rgba(155,58,26,.2)"><strong style="color:var(--rust)">Could not connect to AI grader.</strong><br>Check your connection and try again. Your written response is saved above — you can still review the sample answer by clicking the button below the question.</div>`;
+    console.error('AI grading error:', err);
+  }
+}
+
+function renderAIFeedback(id, data, type, maxPts, sampleHtml) {
+  const earned = Number(data.total) || 0;
+  const pct = Math.round((earned / maxPts) * 100);
+  const dotColor = pct >= 75 ? 'var(--forest)' : pct >= 50 ? 'var(--amber)' : 'var(--rust)';
+  const scoreLabel = pct >= 85 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 50 ? 'Developing' : 'Needs Work';
+
+  const dotsHtml = Array.from({length:maxPts},(_,i)=>
+    `<div class="ai-dot ${i<earned?'earned':'missed'}"></div>`
+  ).join('');
+
+  const criteria = data.parts || data.criteria || [];
+  const critHtml = criteria.map(c => {
+    const isEarned = c.earned === true || c.earned === 1 || c.earned === '1';
+    const name = c.name || `Part ${(c.part||'').toUpperCase()}`;
+    return `<div class="ai-crit-row">
+      <div class="ai-crit-icon ${isEarned?'hit':'miss'}">${isEarned?'✓':'✗'}</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:baseline;gap:0">
+          <span class="ai-crit-name">${name}</span>
+          <span class="ai-crit-pts ${isEarned?'hit':'miss'}">${isEarned?'  +1':'  0'}</span>
+        </div>
+        <div class="ai-crit-reason">${c.reason||''}</div>
+        ${c.fix ? `<div class="ai-crit-fix"><strong>Fix:</strong> ${c.fix}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const annoKey = type==='saq' ? `<div class="ai-anno-key">
+    <span class="ai-anno-tag" style="background:#FDE68A;color:#78450A">Yellow = Answer</span>
+    <span class="ai-anno-tag" style="background:#BBF7D0;color:#14532D">Green = Evidence</span>
+    <span class="ai-anno-tag" style="background:#BFDBFE;color:#1E3A5F">Blue = Explanation</span>
+  </div>` : '';
+
+  document.getElementById('rf-'+id).innerHTML = `
+    <div class="ai-score-header">
+      <div>
+        <div class="ai-score-num" style="color:${dotColor}">${earned}/${maxPts}</div>
+        <div class="ai-score-label">${scoreLabel}</div>
+      </div>
+      <div class="ai-dots">${dotsHtml}</div>
+      <div class="ai-callouts">
+        <div class="ai-strength">✓ ${data.strength||''}</div>
+        <div class="ai-fix">↑ ${data.priority_fix||''}</div>
+      </div>
+    </div>
+    <div class="ai-panels">
+      <div class="ai-panel">
+        <div class="ai-panel-title">Rubric Breakdown</div>
+        ${critHtml}
+      </div>
+      <div class="ai-panel">
+        <div class="ai-panel-title">Sample Answer${type==='leq'?' — Thesis':''}</div>
+        <div class="ai-sample">${sampleHtml}</div>
+        ${annoKey}
+      </div>
+    </div>`;
+}
 
 </script>
 </body>
